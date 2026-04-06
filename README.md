@@ -1,16 +1,129 @@
-# React + Vite
+# UserList — Junior Frontend Developer Assessment
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React application that displays a filterable list of users, built as part of a Junior Frontend Developer technical assessment.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- Displays all 50 users on load
+- Filter users by role: **Admin**, **Customer**, or **Vendor**
+- Click an active filter again to reset back to all users
+- Toggle to show or hide the full user list
+- Color-coded role badges for quick visual scanning
+- Live count of users currently displayed
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- [React](https://react.dev/) — UI library
+- [Vite](https://vitejs.dev/) — development server and build tool
+- Plain CSS — component-scoped styles
+
+---
+
+## Project Structure
+
+```
+my-assessment/
+├── public/
+├── src/
+│   ├── components/
+│   │   ├── UserList.jsx       # Main component
+│   │   └── UserList.css       # Component styles
+│   ├── dataset.json           # 50-user data source
+│   ├── App.jsx                # Root component
+│   └── main.jsx               # Entry point
+├── package.json
+└── README.md
+```
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) v18 or higher
+- npm (comes with Node.js)
+
+### Installation
+
+```bash
+# 1. Clone or download the project
+cd my-assessment
+
+# 2. Install dependencies
+npm install
+
+# 3. Start the development server
+npm run dev
+```
+
+The app will be running at **http://localhost:5173**
+
+---
+
+## How It Works
+
+### State
+
+The component uses two `useState` variables:
+
+| State | Type | Purpose |
+|---|---|---|
+| `activeFilter` | `string \| null` | Tracks the selected role filter |
+| `showAll` | `boolean` | Controls whether the list is visible |
+
+### Filtering Logic
+
+`filteredUsers` is a derived value — computed on every render from `activeFilter` and `showAll`. No extra state is needed:
+
+```js
+const filteredUsers = !showAll
+  ? []
+  : activeFilter
+  ? users.filter((user) => user.role === activeFilter)
+  : users;
+```
+
+### Event Handlers
+
+```js
+// Clicking the same filter again resets it
+function handleFilterClick(role) {
+  setActiveFilter(activeFilter === role ? null : role);
+  setShowAll(true);
+}
+
+// Toggle hides the list and resets any active filter
+function handleToggle() {
+  setShowAll((prev) => !prev);
+  setActiveFilter(null);
+}
+```
+
+---
+
+## Dataset
+
+Users are stored in `src/dataset.json` and imported directly into the component:
+
+```js
+import users from "../dataset.json";
+```
+
+The dataset contains 50 users across three roles: Admin, Customer, and Vendor.
+
+---
+
+## Assessment Requirements Checklist
+
+- [x] `UserList` React component
+- [x] All users displayed on load
+- [x] Dataset saved in `dataset.json`
+- [x] Filter button: Admin
+- [x] Filter button: Customer
+- [x] Filter button: Vendor
+- [x] Bonus: Toggle to show all / hide users
