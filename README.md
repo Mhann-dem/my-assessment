@@ -1,129 +1,36 @@
-# UserList — Junior Frontend Developer Assessment
+# UserList Assessment
 
-A React application that displays a filterable list of users, built as part of a Junior Frontend Developer technical assessment.
+A React app built for the Junior Frontend Developer technical assessment.
 
----
+## What it does
 
-## Features
+Displays a list of 50 users and lets you filter them by role — Admin, Customer, or Vendor. Clicking a filter a second time resets back to all users. There's also a toggle button to hide and show the list.
 
-- Displays all 50 users on load
-- Filter users by role: **Admin**, **Customer**, or **Vendor**
-- Click an active filter again to reset back to all users
-- Toggle to show or hide the full user list
-- Color-coded role badges for quick visual scanning
-- Live count of users currently displayed
+## Running the project
 
----
-
-## Tech Stack
-
-- [React](https://react.dev/) — UI library
-- [Vite](https://vitejs.dev/) — development server and build tool
-- Plain CSS — component-scoped styles
-
----
-
-## Project Structure
-
-```
-my-assessment/
-├── public/
-├── src/
-│   ├── components/
-│   │   ├── UserList.jsx       # Main component
-│   │   └── UserList.css       # Component styles
-│   ├── dataset.json           # 50-user data source
-│   ├── App.jsx                # Root component
-│   └── main.jsx               # Entry point
-├── package.json
-└── README.md
-```
-
----
-
-## Getting Started
-
-### Prerequisites
-
-- [Node.js](https://nodejs.org/) v18 or higher
-- npm (comes with Node.js)
-
-### Installation
+Make sure you have Node.js installed, then:
 
 ```bash
-# 1. Clone or download the project
-cd my-assessment
-
-# 2. Install dependencies
 npm install
-
-# 3. Start the development server
 npm run dev
 ```
 
-The app will be running at **http://localhost:5173**
+Open http://localhost:5173 in your browser.
 
----
+## Folder structure
 
-## How It Works
-
-### State
-
-The component uses two `useState` variables:
-
-| State | Type | Purpose |
-|---|---|---|
-| `activeFilter` | `string \| null` | Tracks the selected role filter |
-| `showAll` | `boolean` | Controls whether the list is visible |
-
-### Filtering Logic
-
-`filteredUsers` is a derived value — computed on every render from `activeFilter` and `showAll`. No extra state is needed:
-
-```js
-const filteredUsers = !showAll
-  ? []
-  : activeFilter
-  ? users.filter((user) => user.role === activeFilter)
-  : users;
+```
+src/
+├── components/
+│   ├── UserList.jsx
+│   └── UserList.css
+├── dataset.json
+├── App.jsx
+└── main.jsx
 ```
 
-### Event Handlers
+The user data lives in `dataset.json` and is imported directly into the component. `App.jsx` just renders `<UserList />` — all the logic is inside the component itself.
 
-```js
-// Clicking the same filter again resets it
-function handleFilterClick(role) {
-  setActiveFilter(activeFilter === role ? null : role);
-  setShowAll(true);
-}
+## Notes
 
-// Toggle hides the list and resets any active filter
-function handleToggle() {
-  setShowAll((prev) => !prev);
-  setActiveFilter(null);
-}
-```
-
----
-
-## Dataset
-
-Users are stored in `src/dataset.json` and imported directly into the component:
-
-```js
-import users from "../dataset.json";
-```
-
-The dataset contains 50 users across three roles: Admin, Customer, and Vendor.
-
----
-
-## Assessment Requirements Checklist
-
-- [x] `UserList` React component
-- [x] All users displayed on load
-- [x] Dataset saved in `dataset.json`
-- [x] Filter button: Admin
-- [x] Filter button: Customer
-- [x] Filter button: Vendor
-- [x] Bonus: Toggle to show all / hide users
+I used two pieces of state — `activeFilter` to track which role button is selected, and `showAll` for the toggle. The filtered list is derived from those two values on each render rather than stored as its own state variable, which keeps things simpler.
